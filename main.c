@@ -10,6 +10,29 @@
 #include "hardware/pwm.h"
 #include "mmhal.h"
 
+enum{
+  MODE_MANUAL,
+  MODE_COMMAND
+};
+
+float x;
+float y;
+float z;
+
+float home_x;
+float home_y;
+float home_z;
+
+int spindle_pwm;
+int spindle_on;
+
+int absolute_mode; // 0 for relative, 1 for absolute
+int units_mm;
+float feed_rate;
+
+
+
+
 bool manual_mode = true; // Start in manual mode for testing
 
 int main(void)
@@ -32,7 +55,7 @@ int main(void)
     sleep_ms(200);
     mmhal_step_motors(0, -1, 0); // Step Y axis in negative direction
     sleep_ms(200);
-    
+
     //  Repeated code here
     //if (manual_mode)
     //{
