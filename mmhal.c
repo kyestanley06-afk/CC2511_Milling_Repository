@@ -48,8 +48,12 @@ void mmhal_init() //Initialises GPIO pins
 
 void mmhal_set_spindle_pwm(uint16_t pwm_level)
 {
-  // TODO - Implement spindle PWM setting
-}
+  // Implement spindle PWM setting
+  uint pwm_slice_num = pwm_gpio_to_slice_num(SPINDLE_PIN);
+  uint channel = pwm_gpio_to_channel(SPINDLE_PIN);
+
+  pwm_set_chan_level(pwm_slice_num, channel, pwm_level);
+} 
 
 void mmhal_set_microstepping(int x_or_y, mmhal_microstep_mode_t mode)
 {
