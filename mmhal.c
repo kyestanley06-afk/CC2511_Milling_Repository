@@ -25,17 +25,25 @@ volatile int mmhal_low_delay_us = 100;   // Microseconds for step pulse low time
 /**
  * @brief Initialize GPIO pins and PWM for spindle control
  */
-void mmhal_init()
+void mmhal_init() //Initialises GPIO pins
 {
-  // TODO - Initialise GPIO pins
-
-  for (int i = 0; i < DIMCOUNT; i++)
+  
+//Initialise the pins for X, Y & Z steppers, using the step_pins and dir_pins arrays
+  for (int i = 0; i < DIMCOUNT; i++) 
   {
-    // TODO - Initialise the pins for X, Y & Z steppers, using the
-    // step_pins and dir_pins arrays
+    gpio_init(step_pins[i]);
+    gpio_set_dir(step_pins[i], GPIO_OUT);
+    gpio_put(step_pins[i], 0); 
+
+    gpio_init(dir_pins[i]);
+    gpio_set_dir(dir_pins[i], GPIO_OUT);
+    gpio_put(dir_pins[i], 0);
   }
 
-  // TODO - Initialize spindle PWM
+// Initialize spindle PWM
+  gpio_set_function(SPINDLE_PIN, GPIO_FUNC_PWM);
+  uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PIN);
+  uint channel = pwm_gpio_to_channel(SPINDLE_PIN);
 }
 
 void mmhal_set_spindle_pwm(uint16_t pwm_level)
