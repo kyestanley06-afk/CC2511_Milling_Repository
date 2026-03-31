@@ -53,3 +53,6 @@
 2977	3612	7966496628435558	CMakeFiles/milling_basic.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/pico_stdio_uart/stdio_uart.c.obj	8108411d90c90ff4
 2902	3640	7966496628758123	CMakeFiles/milling_basic.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/pico_stdio/stdio.c.obj	bea2f2034f6224ee
 3641	4336	7966496631295635	milling_basic.elf	66f8f6501fc33a4b
+100	526	7966509872511908	CMakeFiles/milling_basic.dir/mmhal.c.obj	149e2eb32b20f10e
+89	530	7966509872511908	CMakeFiles/milling_basic.dir/main.c.obj	37c7366ddab5bcd6
+530	1295	7966509876035807	milling_basic.elf	66f8f6501fc33a4b
