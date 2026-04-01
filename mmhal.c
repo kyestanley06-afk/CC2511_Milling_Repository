@@ -40,6 +40,7 @@ void mmhal_init() //Initialises GPIO pins
     gpio_put(dir_pins[i], 0);
   }
 
+
 // Initialize spindle PWM
   gpio_set_function(SPINDLE_PIN, GPIO_FUNC_PWM);
   uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PIN);
@@ -55,9 +56,36 @@ void mmhal_set_spindle_pwm(uint16_t pwm_level)
   pwm_set_chan_level(pwm_slice_num, channel, pwm_level);
 } 
 
+// Implement microstepping mode setting
 void mmhal_set_microstepping(int x_or_y, mmhal_microstep_mode_t mode)
 {
-  // TODO - Implement microstepping mode setting
+  int mode0_pin; 
+  int mode1_pin;
+  int mode2_pin;
+
+  if (x_or_y == 0) // X axis
+  {
+    mode0_pin = X_MODE0_PIN;
+    mode1_pin = X_MODE1_PIN;
+    mode2_pin = X_MODE2_PIN;
+  }
+  else // Y axis
+  {
+    mode0_pin = Y_MODE0_PIN;
+    mode1_pin = Y_MODE1_PIN;
+    mode2_pin = Y_MODE2_PIN;
+  }
+
+  int b0 = 0;
+  int b1 = 0;
+  int b2 = 0;
+
+  //Switch Code goes here
+
+
+  gpio_put(mode0_pin, b0);
+  gpio_put(mode1_pin, b1);
+  gpio_put(mode2_pin, b2);
 }
 
 /**
