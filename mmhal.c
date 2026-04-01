@@ -93,15 +93,42 @@ void mmhal_set_microstepping(int x_or_y, mmhal_microstep_mode_t mode)
  * @param dirs Array of 3 directions: -1 for negative,
  * 0 for no movement, 1 for positive
  */
+
+// Implement motor stepping logic, using the dirs array
 void mmhal_step_motors_impl(int dirs[])
 {
-  // TODO - Implement motor stepping logic, using the dirs array
-  // to determine which motors to step and in which direction
-  // Remember to use the stepper_multipliers array to handle
-  // asymmetric stepper directions
+  // determine which motors to step and in which direction
+  for(int i = 0; i < DIMCOUNT; i++)
+  {
+    if (dirs[i] != 0) 
+    {
+      // Remember to use the stepper_multipliers array to handle asymmetric stepper directions
+      int effective_dir = dirs[i] * stepper_multipliers[i];
+      gpio_put(dir_pins[i], (effective_dir > 0) ? 1 : 0);
+    }
+  }
 
-  // TODO - Implement the timing for the step pulses, using
-  // mmhal_high_delay_us and mmhal_low_delay_us for the pulse timing
+
+//Implement the timing for the step pulses, using mmhal_high_delay_us and mmhal_low_delay_us for the pulse timing
+  for (int i = 0; i < DIMCOUNT; i++)
+    {
+        if (dirs[i] != 0)
+        {
+            gpio_put(step_pins[i], 1);
+        }
+    }
+
+  sleep_us(mmhal_high_delay_us);
+
+  for (int i = 0; i < DIMCOUNT; i++)
+  {
+    if (dirs[i] != 0)
+    {
+      gpio_put(step_pins[i], 0);
+    }
+  }
+
+  sleep_us(mmhal_low_delay_us);
 }
 
 void mmhal_step_motors(int x_dir, int y_dir, int z_dir)
