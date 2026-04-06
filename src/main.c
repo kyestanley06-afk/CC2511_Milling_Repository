@@ -134,9 +134,16 @@ void machine_init(machine_state_t *machine)   // Initialize machine state
 
 // Hardware facing helpers functions //
 
-void spindle_on(machine_state_t *machine)
+void spindle_on(const machine_state_t *machine)
 {
-  // Turn on spindle
+    if (machine->spindle_on)
+    {
+        mmhal_set_spindle_pwm((uint16_t)machine->spindle_pwm);
+    }
+    else
+    {
+        mmhal_set_spindle_pwm(0);
+    }
 }
 
 void step_axis(int axis, int dir, int feed_rate)
