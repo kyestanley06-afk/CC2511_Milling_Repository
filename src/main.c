@@ -80,9 +80,23 @@ void print_manual_help(void)  // Will print manual code control
   printf("===================\r\n");
 }
 
-void print_command_help(void)
+void print_command_help(void) // Will print the list of supported G-code commands
 {
-  // Will print the list of supported G-code commands
+  printf("\r\n=== COMMAND MODE ===\r\n");
+  printf("Supported commands:\r\n");
+  printf("M2 / M02           -> manual mode\r\n");
+  printf("G0 / G00 X Y Z     -> rapid move\r\n");
+  printf("G1 / G01 X Y Z F   -> linear move\r\n");
+  printf("G4 / G04 P         -> dwell\r\n");
+  printf("G28                -> return home\r\n");
+  printf("G28.1              -> set home here\r\n");
+  printf("G90                -> absolute mode\r\n");
+  printf("G91                -> relative mode\r\n");
+  printf("G20                -> inches\r\n");
+  printf("G21                -> millimetres\r\n");
+  printf("M3 Snnn            -> spindle on\r\n");
+  printf("M5                 -> spindle off\r\n");
+  printf("====================\r\n");
 }
 
 void print_machine_status(const machine_state_t *machine)
