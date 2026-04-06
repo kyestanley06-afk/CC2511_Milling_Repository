@@ -15,7 +15,7 @@ typedef enum{
   MODE_COMMAND = 1,
 } machine_mode_t;
 
-type def struct{
+typedef struct{
   float x;
   float y;
   float z;
@@ -117,11 +117,48 @@ void handle_manual_key(machine_state_t *machine, char key)
   // Handle manual control key input
 }
 
-
 //G-code parsing//
+void parse_gcode_params(const char* line, g_code_params_t *params)
+{
+  // Parse a line of G-code and populate the params structure
+}
 
+void execute_move_position(machine_state_t *machine, const g_code_params_t *params)
+{
+  // Execute a move to the specified position based on G-code parameters
+}
 
+void execute_g0(machine_state_t *machine, const g_code_params_t *params)
+{
+  // Execute G00
+}
+
+void execute_g1(machine_state_t *machine, const g_code_params_t *params)
+{
+  // Execute G01
+}
+
+void handle_gcode_line(char* line, machine_state_t *machine)
+{
+  // Handle a line of G-code command
+}
 //Command Mode//
 
 
 //Main User Interface loop//
+int main(void)
+{
+  stdio_init_all();
+  machine_state_t machine;
+  machine_init(&machine);
+
+  while (true) {
+    if (machine.mode == MODE_MANUAL) {
+      // Handle manual mode input
+    } else if (machine.mode == MODE_COMMAND) {
+      // Handle command mode input
+    }
+  }
+
+  return 0;
+}
