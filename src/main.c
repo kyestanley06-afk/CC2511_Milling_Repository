@@ -47,7 +47,19 @@ void uppercase_string(char* str) //Converts a string to uppercase
 
 void clear_gcode_paramamters(g_code_params_t *params) // Reset G-code parameters
 {
+  params->has_x = false;
+  params->has_y = false;
+  params->has_z = false;
+  params->has_f = false;
+  params->has_s = false;
+  params->has_p = false;
 
+  params->x = 0.0f;
+  params->y = 0.0f;
+  params->z = 0.0f;
+  params->f = 0.0f;
+  params->s = 0.0f;
+  params->p = 0.0f; 
 }
 
 
