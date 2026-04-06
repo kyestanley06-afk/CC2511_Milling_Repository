@@ -165,9 +165,13 @@ void step_axis(int axis, int dir, int feed_rate) // Step the specified axis by t
   }
 }
 
-float(convert_to_mm(float value, bool units_mm))
+float(convert_to_mm(float value, bool units_mm))   // Convert value to mm if units are in inches
 {
-  // Convert value to mm if units are in inches
+  if (units_mm)
+  {
+    return value;
+  }
+  return value * 25.4f;
 }
 
 // Motion Helpers //
