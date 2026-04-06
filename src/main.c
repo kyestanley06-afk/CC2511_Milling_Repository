@@ -146,9 +146,23 @@ void spindle_on(const machine_state_t *machine)
     }
 }
 
-void step_axis(int axis, int dir, int feed_rate)
+void step_axis(int axis, int dir, int feed_rate) // Step the specified axis by the given distance at the specified feed rate
 {
-  // Step the specified axis by the given distance at the specified feed rate
+  for (int i = 0; i < feed_rate; i++)
+  {
+    if (axis == XDIM)
+      {
+        mmhal_step_motors(dir, 0, 0);
+      }
+    else if (axis == YDIM)
+      {
+        mmhal_step_motors(0, dir, 0);
+      }
+    else if (axis == ZDIM)
+      {
+         mmhal_step_motors(0, 0, dir);
+      }
+  }
 }
 
 float(convert_to_mm(float value, bool units_mm))
