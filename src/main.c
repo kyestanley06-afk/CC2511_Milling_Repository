@@ -112,9 +112,24 @@ void print_machine_status(const machine_state_t *machine)   // Print current mac
 
 //Machine State functions//
 
-void machine_init(machine_state_t *machine)
+void machine_init(machine_state_t *machine)   // Initialize machine state
 {
-  // Initialize machine state
+  machine->x = 0.0f;
+  machine->y = 0.0f;
+  machine->z = 0.0f;
+
+  machine->home_x = 0.0f;
+  machine->home_y = 0.0f;
+  machine->home_z = 0.0f;
+
+  machine->absolute_mode = true;    // G90 default
+  machine->units_mm = true;         // G21 default
+  machine->feed_rate = DEFAULT_FEED_RATE;
+
+  machine->spindle_on = false;
+  machine->spindle_pwm = DEFAULT_SPINDLE_PWM;
+
+  machine->mode = MODE_MANUAL;
 }
 
 // Hardware facing helpers functions //
