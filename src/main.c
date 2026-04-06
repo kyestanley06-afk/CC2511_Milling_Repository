@@ -10,6 +10,8 @@
 #include "hardware/pwm.h"
 #include "mmhal.h"
 
+#define STEPS_PER_UNIT 10.0f
+
 typedef enum{
   MODE_MANUAL = 0,
   MODE_COMMAND = 1,
@@ -176,9 +178,42 @@ float(convert_to_mm(float value, bool units_mm))   // Convert value to mm if uni
 
 // Motion Helpers //
 
-void move_relative(machine_state_t *machine, float dx, float dy, float dz)
+void move_relative(machine_state_t *machine, float dx, float dy, float dz)   // Move machine relative to current position
 {
-  // Move machine relative to current position
+  int x_steps = (int)(dx * STEPS_PER_UNIT);
+  int y_steps = (int)(dy * STEPS_PER_UNIT);
+  int z_steps = (int)(dz * STEPS_PER_UNIT);
+
+    if (x_steps > 0)
+    { 
+        step_axis(XDIM, 1, x_steps);
+    }
+    else if (x_steps < 0)
+    {
+        step_axis(XDIM, -1, -x_steps);
+    }
+
+    if (y_steps > 0)
+    {
+        step_axis(YDIM, 1, y_steps);
+    }
+    else if (y_steps < 0)
+    {
+        step_axis(YDIM, -1, -y_steps);
+    }
+
+    if (z_steps > 0)
+    {
+        step_axis(ZDIM, 1, z_steps);
+    }
+    else if (z_steps < 0)
+    {
+        step_axis(ZDIM, -1, -z_steps);
+    }
+
+    machine->x += dx;
+    machine->y += dy;
+    machine->z += dz;
 }
 
 void move_absolute(machine_state_t *machine, float x, float y, float z)
