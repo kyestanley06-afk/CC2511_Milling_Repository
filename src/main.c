@@ -37,14 +37,17 @@ typedef struct{
 
 // Utility functions//
 
-void uppercase_string(char* str)
+void uppercase_string(char* str) //Converts a string to uppercase
 {
-  //convert string to uppercase
+  for (int i = 0; strt[i] != '\0'; i++)
+    {
+        text[i] = (char)toupper((unsigned char)text[i]);
+    }
 }
 
-void clear_gcode_paramamters(g_code_params_t *params)
+void clear_gcode_paramamters(g_code_params_t *params) // Reset G-code parameters
 {
-  // Reset G-code parameters
+
 }
 
 
@@ -123,6 +126,8 @@ void parse_gcode_params(const char* line, g_code_params_t *params)
   // Parse a line of G-code and populate the params structure
 }
 
+
+//G-code execution//
 void execute_move_position(machine_state_t *machine, const g_code_params_t *params)
 {
   // Execute a move to the specified position based on G-code parameters
@@ -142,8 +147,6 @@ void handle_gcode_line(char* line, machine_state_t *machine)
 {
   // Handle a line of G-code command
 }
-//Command Mode//
-
 
 //Main User Interface loop//
 int main(void)
