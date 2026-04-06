@@ -62,10 +62,22 @@ void clear_gcode_paramamters(g_code_params_t *params) // Reset G-code parameters
   params->p = 0.0f; 
 }
 
-
-void print_manual_help(void)
+void print_manual_help(void)  // Will print manual code control 
 {
-  // Will print manual code control 
+  printf("\r\n=== MANUAL MODE ===\r\n");
+  printf("a = left  (-X)\r\n");
+  printf("d = right (+X)\r\n");
+  printf("w = forward (+Y)\r\n");
+  printf("s = back    (-Y)\r\n");
+  printf("r = up    (+Z)\r\n");
+  printf("f = down  (-Z)\r\n");
+  printf("+ = spindle PWM up\r\n");
+  printf("- = spindle PWM down\r\n");
+  printf("o = spindle on\r\n");
+  printf("p = spindle off\r\n");
+  printf("c = switch to command mode\r\n");
+  printf("h = show help\r\n");
+  printf("===================\r\n");
 }
 
 void print_command_help(void)
