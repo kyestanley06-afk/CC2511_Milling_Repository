@@ -225,14 +225,16 @@ void move_absolute(machine_state_t *machine, float target_x, float target_y, flo
   move_relative(machine, dx, dy, dz);
 }
 
-void set_home(machine_state_t *machine)
+void set_home(machine_state_t *machine)   // Set current position as home
 {
-  // Set current position as home
+  machine->home_x = machine->x;
+  machine->home_y = machine->y;
+  machine->home_z = machine->z;
 }
 
-void return_home(machine_state_t *machine)
+void return_home(machine_state_t *machine) // Move machine to home position
 {
-  // Move machine to home position
+  move_absolute(machine, machine->home_x, machine->home_y, machine->home_z);
 }
 
 //Manual Mode//
