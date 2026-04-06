@@ -239,9 +239,99 @@ void return_home(machine_state_t *machine) // Move machine to home position
 
 //Manual Mode//
 
-void handle_manual_key(machine_state_t *machine, char key)
+void handle_manual_key(machine_state_t *machine, char key)   // Handle manual control key input
 {
-  // Handle manual control key input
+  float step = MANUAL_STEP_UNITS;
+
+  switch (key)
+  {
+    case 'a':
+    case 'A':
+        move_relative(machine, -step, 0.0f, 0.0f);
+        printf("Moved left\r\n");
+        break;
+
+    case 'd':
+    case 'D':
+        move_relative(machine, step, 0.0f, 0.0f);
+        printf("Moved right\r\n");
+        break;
+
+    case 'w':
+    case 'W':
+        move_relative(machine, 0.0f, step, 0.0f);
+        printf("Moved forward\r\n");
+        break;
+
+    case 's':
+    case 'S':
+        move_relative(machine, 0.0f, -step, 0.0f);
+        printf("Moved back\r\n");
+        break;
+
+    case 'r':
+    case 'R':
+        move_relative(machine, 0.0f, 0.0f, step);
+        printf("Moved up\r\n");
+        break;
+
+    case 'f':
+    case 'F':
+        move_relative(machine, 0.0f, 0.0f, -step);
+        printf("Moved down\r\n");
+        break;
+
+    case '+':
+        machine->spindle_pwm += 10;
+        if (machine->spindle_pwm > 255)
+        {
+          machine->spindle_pwm = 255;
+        }
+        spindle_on(machine);
+        printf("Spindle PWM = %d\r\n", machine->spindle_pwm);
+        break;
+
+    case '-':
+        machine->spindle_pwm -= 10;
+        if (machine->spindle_pwm < 0)
+        {
+          machine->spindle_pwm = 0;
+        }
+        spindle_on(machine);
+        printf("Spindle PWM = %d\r\n", machine->spindle_pwm);
+        break;
+
+    case 'o':
+    case 'O':
+        machine->spindle_on = true;
+        spindle_on(machine);
+        printf("Spindle ON\r\n");
+        break;
+
+    case 'p':
+    case 'P':
+        machine->spindle_on = false;
+        spindle_on(machine);
+        printf("Spindle OFF\r\n");
+        break;
+
+    case 'c':
+    case 'C':
+        machine->mode = MODE_COMMAND;
+        printf("\r\nSwitched to command mode\r\n");
+        print_command_help();
+        break;
+
+    case 'h':
+    case 'H':
+        print_manual_help();
+        break;
+
+    default:
+        break;
+    }
+
+    print_machine_status(machine);
 }
 
 //G-code parsing//
