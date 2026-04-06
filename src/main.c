@@ -216,9 +216,13 @@ void move_relative(machine_state_t *machine, float dx, float dy, float dz)   // 
     machine->z += dz;
 }
 
-void move_absolute(machine_state_t *machine, float x, float y, float z)
+void move_absolute(machine_state_t *machine, float target_x, float target_y, float target_z) // Move machine to absolute position
 {
-  // Move machine to absolute position
+  float dx = target_x - machine->x;
+  float dy = target_y - machine->y;
+  float dz = target_z - machine->z;
+
+  move_relative(machine, dx, dy, dz);
 }
 
 void set_home(machine_state_t *machine)
