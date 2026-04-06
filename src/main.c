@@ -99,9 +99,14 @@ void print_command_help(void) // Will print the list of supported G-code command
   printf("====================\r\n");
 }
 
-void print_machine_status(const machine_state_t *machine)
+void print_machine_status(const machine_state_t *machine)   // Print current machine status
 {
-  // Print current machine status
+  printf("POS X=%.2f Y=%.2f Z=%.2f | ", machine->x, machine->y, machine->z);
+  printf("HOME X=%.2f Y=%.2f Z=%.2f | ", machine->home_x, machine->home_y, machine->home_z);
+  printf("MODE=%s | ", machine->mode == MODE_MANUAL ? "MANUAL" : "COMMAND");
+  printf("COORD=%s | ", machine->absolute_mode ? "ABS" : "REL");
+  printf("UNITS=%s | ", machine->units_mm ? "MM" : "INCH");
+  printf("SPINDLE=%s PWM=%d\r\n", machine->spindle_on ? "ON" : "OFF", machine->spindle_pwm);
 }
 
 
