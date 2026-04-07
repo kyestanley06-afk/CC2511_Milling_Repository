@@ -80,8 +80,30 @@ void mmhal_set_microstepping(int x_or_y, mmhal_microstep_mode_t mode)
   int b1 = 0;
   int b2 = 0;
 
-  //Switch Code goes here
-
+switch (mode)
+    {
+        case MMHAL_MS_MODE_1:
+            b0 = 0; b1 = 0; b2 = 0;
+            break;
+        case MMHAL_MS_MODE_2:
+            b0 = 1; b1 = 0; b2 = 0;
+            break;
+        case MMHAL_MS_MODE_4:
+            b0 = 0; b1 = 1; b2 = 0;
+            break;
+        case MMHAL_MS_MODE_8:
+            b0 = 1; b1 = 1; b2 = 0;
+            break;
+        case MMHAL_MS_MODE_16:
+            b0 = 0; b1 = 0; b2 = 1;
+            break;
+        case MMHAL_MS_MODE_32:
+            b0 = 1; b1 = 0; b2 = 1;
+            break;
+        default:
+            b0 = 0; b1 = 0; b2 = 0;
+            break;
+    }
 
   gpio_put(mode0_pin, b0);
   gpio_put(mode1_pin, b1);

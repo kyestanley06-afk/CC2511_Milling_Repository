@@ -4,10 +4,13 @@
  * milling_basic
  * ***********************************************************/
 
-#include "pico/stdlib.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
 #include <stdbool.h>
-#include <stdio.h> // printf
-#include "hardware/pwm.h"
+
+#include "pico/stdlib.h"
 #include "mmhal.h"
 
 #define STEPS_PER_UNIT 10.0f
