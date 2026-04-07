@@ -11,6 +11,10 @@
 #include "mmhal.h"
 
 #define STEPS_PER_UNIT 10.0f
+#define MANUAL_STEP_UNITS 1.0f
+#define DEFAULT_FEED_RATE 100.0f
+#define DEFAULT_SPINDLE_PWM 128
+#define MAX_LINE_LENGTH 100
 
 typedef enum{
   MODE_MANUAL = 0,
@@ -349,7 +353,9 @@ void execute_move_position(machine_state_t *machine, const g_code_params_t *para
 
 void execute_g0(machine_state_t *machine, const g_code_params_t *params)
 {
-  // Execute G00
+  execute_position_move(machine, params);
+  printf("G0 complete\r\n");
+  print_machine_status(machine);
 }
 
 void execute_g1(machine_state_t *machine, const g_code_params_t *params)
@@ -369,11 +375,28 @@ int main(void)
   machine_state_t machine;
   machine_init(&machine);
 
+  sleep_ms(2000);
+
+  printf("\r\nCC2511 Milling Machine Controller\r\n");
+  printf("Text-based terminal UI running on Pi Pico\r\n");
+  printf("Manual mode active\r\n");
+  print_manual_help();
+  print_machine_status(&machine);
+
   while (true) {
-    if (machine.mode == MODE_MANUAL) {
-      // Handle manual mode input
-    } else if (machine.mode == MODE_COMMAND) {
-      // Handle command mode input
+    if (machine.mode == MODE_MANUAL) { // Handle manual mode input
+      int ch = getchar_timeout_us(0);
+          if (ch != PICO_ERROR_TIMEOUT)
+          {
+              handle_manual_key((char)ch, &machine);
+          }
+    }
+    else  // Handle command mode input
+    {      
+      char line[MAX_LINE_LENGTH];
+      printf("CMD> ");
+      read_line(line, sizeof(line));
+      handle_gcode_line(line, &machine);
     }
   }
 
