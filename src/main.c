@@ -391,7 +391,7 @@ void parse_gcode_params(const char* line, g_code_params_t *params) // Parse a li
                 params->has_p = true;
                 params->p = value;
                 break;
-                
+
             default:
                 break;
             }
@@ -403,9 +403,26 @@ void parse_gcode_params(const char* line, g_code_params_t *params) // Parse a li
 
 
 //G-code execution//
-void execute_move_position(machine_state_t *machine, const g_code_params_t *params)
+void execute_move_position(machine_state_t *machine, const g_code_params_t *params)   // Execute a move to the specified position based on G-code parameters
 {
-  // Execute a move to the specified position based on G-code parameters
+  float target_x = machine->x;
+  float target_y = machine->y;
+  float target_z = machine->z;
+
+  if (machine->absolute_mode)
+  {
+    if (params->has_x) target_x = convert_to_mm(params->x, machine->units_mm);
+    if (params->has_y) target_y = convert_to_mm(params->y, machine->units_mm);
+    if (params->has_z) target_z = convert_to_mm(params->z, machine->units_mm);
+  }
+  else
+  {
+    if (params->has_x) target_x += convert_to_mm(params->x, machine->units_mm);
+    if (params->has_y) target_y += convert_to_mm(params->y, machine->units_mm);
+    if (params->has_z) target_z += convert_to_mm(params->z, machine->units_mm);
+  }
+
+  move_absolute(machine, target_x, target_y, target_z);
 }
 
 void execute_g0(machine_state_t *machine, const g_code_params_t *params)
