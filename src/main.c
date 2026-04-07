@@ -451,9 +451,138 @@ void execute_g1(machine_state_t *machine, const g_code_params_t *params)   // Ex
     print_machine_status(machine);
 }
 
-void handle_gcode_line(char* line, machine_state_t *machine)
+void handle_gcode_line(char* line, machine_state_t *machine)  // Handle a line of G-code command
 {
-  // Handle a line of G-code command
+  uppercase_string(line);
+
+    if (strlen(line) == 0)
+    {
+        return;
+    }
+
+    gcode_params_t params;
+    parse_gcode_params(line, &params);
+
+    char temp[MAX_LINE_LENGTH];
+    strncpy(temp, line, MAX_LINE_LENGTH - 1);
+    temp[MAX_LINE_LENGTH - 1] = '\0';
+
+    char *command = strtok(temp, " ");
+    if (command == NULL)
+    {
+        return;
+    }
+
+    if (strcmp(command, "M2") == 0 || strcmp(command, "M02") == 0)
+    {
+        machine->mode = MODE_MANUAL;
+        printf("Returned to manual mode\r\n");
+        print_manual_help();
+        print_machine_status(machine);
+        return;
+    }
+
+    if (strcmp(command, "G0") == 0 || strcmp(command, "G00") == 0)
+    {
+        execute_g0(machine, &params);
+        return;
+    }
+
+    if (strcmp(command, "G1") == 0 || strcmp(command, "G01") == 0)
+    {
+        execute_g1(machine, &params);
+        return;
+    }
+
+    if (strcmp(command, "G4") == 0 || strcmp(command, "G04") == 0)
+    {
+        if (params.has_p)
+        {
+            sleep_ms((uint32_t)params.p);
+            printf("Dwell complete (%d ms)\r\n", (int)params.p);
+        }
+        else
+        {
+            printf("Error: G4 requires P parameter\r\n");
+        }
+        return;
+    }
+
+    if (strcmp(command, "G20") == 0)
+    {
+        machine->units_mm = false;
+        printf("Units set to inches\r\n");
+        print_machine_status(machine);
+        return;
+    }
+
+    if (strcmp(command, "G21") == 0)
+    {
+        machine->units_mm = true;
+        printf("Units set to millimetres\r\n");
+        print_machine_status(machine);
+        return;
+    }
+
+    if (strcmp(command, "G28") == 0)
+    {
+        return_home(machine);
+        printf("Returned to home\r\n");
+        print_machine_status(machine);
+        return;
+    }
+
+    if (strcmp(command, "G28.1") == 0)
+    {
+        set_home_here(machine);
+        printf("Current position set as home\r\n");
+        print_machine_status(machine);
+        return;
+    }
+
+    if (strcmp(command, "G90") == 0)
+    {
+        machine->absolute_mode = true;
+        printf("Set absolute positioning mode\r\n");
+        print_machine_status(machine);
+        return;
+    }
+
+    if (strcmp(command, "G91") == 0)
+    {
+        machine->absolute_mode = false;
+        printf("Set relative positioning mode\r\n");
+        print_machine_status(machine);
+        return;
+    }
+
+    if (strcmp(command, "M3") == 0)
+    {
+        if (params.has_s)
+        {
+            int pwm = (int)params.s;
+            if (pwm < 0) pwm = 0;
+            if (pwm > 255) pwm = 255;
+            machine->spindle_pwm = pwm;
+        }
+
+        machine->spindle_on = true;
+        spindle_on(machine);
+        printf("Spindle ON, PWM=%d\r\n", machine->spindle_pwm);
+        print_machine_status(machine);
+        return;
+    }
+
+    if (strcmp(command, "M5") == 0)
+    {
+        machine->spindle_on = false;
+        spindle_on(machine);
+        printf("Spindle OFF\r\n");
+        print_machine_status(machine);
+        return;
+    }
+
+    printf("Error: unsupported command\r\n");
 }
 
 //Main User Interface loop//
