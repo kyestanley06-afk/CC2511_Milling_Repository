@@ -68,6 +68,28 @@ void clear_gcode_paramamters(g_code_params_t *params) // Reset G-code parameters
   params->p = 0.0f; 
 }
 
+int read_line(char *buffer, int max_length)
+{
+    int i = 0;
+
+    while (i < max_length - 1)
+    {
+        int ch = getchar();
+
+        if (ch == '\r' || ch == '\n')
+        {
+            break;
+        }
+
+        buffer[i++] = (char)ch;
+        putchar(ch);
+    }
+
+    buffer[i] = '\0';
+    printf("\r\n");
+    return i;
+}
+
 void print_manual_help(void)  // Will print manual code control 
 {
   printf("\r\n=== MANUAL MODE ===\r\n");
