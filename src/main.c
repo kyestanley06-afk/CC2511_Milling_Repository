@@ -339,9 +339,66 @@ void handle_manual_key(machine_state_t *machine, char key)   // Handle manual co
 }
 
 //G-code parsing//
-void parse_gcode_params(const char* line, g_code_params_t *params)
+void parse_gcode_params(const char* line, g_code_params_t *params) // Parse a line of G-code and populate the params structure
 {
-  // Parse a line of G-code and populate the params structure
+  clear_gcode_params(params);
+
+  char temp[MAX_LINE_LENGTH];
+  strncpy(temp, line, MAX_LINE_LENGTH - 1);
+  temp[MAX_LINE_LENGTH - 1] = '\0';
+
+  char *token = strtok(temp, " ");
+  bool first_token = true;
+
+  while (token != NULL)
+  {
+    if (first_token)
+      {
+        first_token = false;
+      }
+    else
+      {
+        char prefix = token[0];
+        float value = (float)atof(&token[1]);
+
+          switch (prefix)
+          {
+            case 'X':
+                params->has_x = true;
+                params->x = value;
+                break;
+            case 'Y':
+                params->has_y = true;
+                params->y = value;
+                break;
+            
+            case 'Z':
+                params->has_z = true;
+                params->z = value;
+                break;
+                
+            case 'F':
+                params->has_f = true;
+                params->f = value;
+                break;
+                
+            case 'S':
+                params->has_s = true;
+                params->s = value;
+                break;
+                
+            case 'P':
+                params->has_p = true;
+                params->p = value;
+                break;
+                
+            default:
+                break;
+            }
+        }
+
+        token = strtok(NULL, " ");
+    }
 }
 
 
