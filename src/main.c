@@ -432,9 +432,23 @@ void execute_g0(machine_state_t *machine, const g_code_params_t *params)
   print_machine_status(machine);
 }
 
-void execute_g1(machine_state_t *machine, const g_code_params_t *params)
+void execute_g1(machine_state_t *machine, const g_code_params_t *params)   // Execute G01
 {
-  // Execute G01
+  if (params->has_f)
+    {
+        machine->feed_rate = params->f;
+        // larger F -> shorter pulse delays -> faster stepping
+        int new_high_delay = (int)(2000.0f - (machine->feed_rate * 5.0f));
+        if (new_high_delay < 200)
+        {
+            new_high_delay = 200;
+        }
+        mmhal_high_delay_us = new_high_delay;
+    }
+
+    execute_position_move(machine, params);
+    printf("G1 complete\r\n");
+    print_machine_status(machine);
 }
 
 void handle_gcode_line(char* line, machine_state_t *machine)
